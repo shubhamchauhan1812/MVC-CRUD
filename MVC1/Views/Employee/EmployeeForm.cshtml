@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "EmployeeForm";
+}
+
+<h2>EmployeeForm</h2>
+
+<table>
+    <tr>
+        <td>Name:</td>
+        <td><input type="text" id="txtname" /></td>
+    </tr>
+    <tr>
+        <td>City:</td>
+        <td><input type="text" id="txtcity" /></td>
+    </tr>
+    <tr>
+        <td>Salary:</td>
+        <td><input type="text" id="txtsalary" /></td>
+    </tr>
+    <tr>
+        <td>
+
+
+        </td>
+        <td><input type="button" id="btnsave" value="Save" onclick="InsertUpdate()" /></td>
+    </tr>
+</table>
+<table id="tbl" border="1" style="background-color:maroon;color:white" width="400px">
+    <tr style="background-color:green;color:white" hight="30px">
+        <th>Employee Id</th> <th>Employee Name</th> <th>Employee City</th> <th>Employee Salary</th><th></th><th></th>
+    </tr>
+</table>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+
+<script type="text/javascript">
+    debugger;
+    var IDDD = 0;
+    $(document).ready(function () {
+        GridShow();
+       
+
+
+    });
+    function GridShow() {
+
+        debugger;
+        $.ajax({
+            url: 'Employee/EmployeeGridShow',
+            type: 'post',
+            data: {},
+            success: function (data) {
+                data = JSON.parse(data);
+                $("#tbl").find("tr:gt(0)").remove();
+                for (var i = 0; i < data.length; i++) {
+                    $("#tbl").append('<tr>  <td>' + data[i].Id + '</td> <td>' + data[i].Name + '</td> <td>' + data[i].City + '</td> <td>' + data[i].Salary + '</td>   <td style="color:blue"><input type="button" id="btndelete" value="Delete" onclick="DELETE(' + data[i].Id + ')" /></td> <td style="color:blue"><input type="button" id="btnedit" value="Edit" onclick="EDIT(' + data[i].Id + ')" /></td></tr>');
+                }
+
+            },
+            error: function () {
+                alert("Error");
+            }
+
+        });
+    }
+    function InsertUpdate() {
+        debugger;
+
+        if ($("#btnsave").val() == "Save" || 'Update') {
+            $.ajax({
+                url: 'Employee/EmployeeInsertUpdate',
+                type: 'post',
+                data: { Idd: IDDD, Name: $("#txtname").val(), City: $("#txtcity").val(), Salary: $("#txtsalary").val() },
+                success: function () {
+                    alert("Saved Successfully");
+                    Clear();
+                    GridShow();
+                },
+                error: function () {
+                    alert("Error");
+                }
+
+            });
+        }
+        //else {
+        //    $.ajax({
+        //        url: 'Employee/EmployeeInsertUpdate',
+        //        type: 'post',
+        //        data: { Idd: IDDD, Name: $("#txtname").val(), City: $("#txtcity").val(), Salary: $("#txtsalary").val() },
+        //        success: function () {
+        //            alert('data updated !!');
+        //            Clear();
+        //            GridShow();
+        //        },
+        //        error: function () {
+        //            alert('data not updated !!');
+        //        }
+        //    });
+        //}
+    }
+        
+        
+    
+
+    function Clear() {
+        $("#txtname").val("");
+        $("#txtcity").val("");
+        $("#txtsalary").val("");
+        $("#btnsave").val("Save");
+        IDDD = 0;
+    }
+
+
+
+    function DELETE(Id) {
+        $.ajax({
+            url: 'Employee/EmployeeDelete',
+            type: 'post',
+            data: { Idd: Id },
+            success: function () {
+                alert('data deleted !!');
+                GridShow();
+
+            },
+            error: function () {
+                alert('data not deleted !!');
+            }
+        });
+    }
+
+    function EDIT(Id) {
+        $.ajax({
+            url: 'Employee/EmployeeEdit',
+            type: 'post',
+            data: { Idd: Id },
+            success: function (data) {
+                data = JSON.parse(data);
+                $("#txtname").val(data[0].Name);
+                $("#txtcity").val(data[0].City);
+                $("#txtsalary").val(data[0].Salary);
+                $("#btnsave").val("Update");
+                IDDD = Id;
+            },
+            error: function () {
+                alert('data not edited !!');
+            }
+            
+        });
+    }
+
+        </script>
+
+
+    
+
+
+
+
