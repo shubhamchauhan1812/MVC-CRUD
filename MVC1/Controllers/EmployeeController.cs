@@ -47,7 +47,7 @@ namespace MVC1.Controllers
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@name", obj.Name);
                 cmd.Parameters.AddWithValue("@city", obj.City);
-                cmd.Parameters.AddWithValue("@salary", obj.Salary);
+                cmd.Parameters.AddWithValue("@salary", Convert.ToDecimal(obj.Salary));
                 cmd.ExecuteNonQuery();
 
                 con.Close();
@@ -61,7 +61,7 @@ namespace MVC1.Controllers
                 cmd.Parameters.AddWithValue("@Id", obj.Idd);
                 cmd.Parameters.AddWithValue("@Name", obj.Name);
                 cmd.Parameters.AddWithValue("@City", obj.City);
-                cmd.Parameters.AddWithValue("@Salary", obj.Salary);
+                cmd.Parameters.AddWithValue("@Salary", Convert.ToDecimal(obj.Salary));
                 cmd.ExecuteNonQuery();
                 con.Close();
 
